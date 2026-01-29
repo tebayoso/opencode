@@ -4,12 +4,15 @@ import { useParams } from "@solidjs/router"
 import { DateTime } from "luxon"
 import { useSync } from "@/context/sync"
 import { useLayout } from "@/context/layout"
+import { useDialog } from "@opencode-ai/ui/context/dialog"
 import { checksum } from "@opencode-ai/util/encode"
 import { Icon } from "@opencode-ai/ui/icon"
+import { Button } from "@opencode-ai/ui/button"
 import { Accordion } from "@opencode-ai/ui/accordion"
 import { StickyAccordionHeader } from "@opencode-ai/ui/sticky-accordion-header"
 import { Code } from "@opencode-ai/ui/code"
 import { Markdown } from "@opencode-ai/ui/markdown"
+import { DialogContextEditor } from "@/components/dialog-context-editor"
 import type { AssistantMessage, Message, Part, UserMessage } from "@opencode-ai/sdk/v2/client"
 
 interface SessionContextTabProps {
@@ -22,6 +25,7 @@ interface SessionContextTabProps {
 export function SessionContextTab(props: SessionContextTabProps) {
   const params = useParams()
   const sync = useSync()
+  const dialog = useDialog()
 
   const ctx = createMemo(() => {
     const last = props.messages().findLast((x) => {
@@ -365,8 +369,19 @@ export function SessionContextTab(props: SessionContextTabProps) {
       onScroll={handleScroll}
     >
       <div class="px-6 pt-4 flex flex-col gap-10">
-        <div class="grid grid-cols-1 @[32rem]:grid-cols-2 gap-4">
-          <For each={stats()}>{(stat) => <Stat label={stat.label} value={stat.value} />}</For>
+        <div class="flex flex-col gap-4">
+          <div class="grid grid-cols-1 @[32rem]:grid-cols-2 gap-4">
+            <For each={stats()}>{(stat) => <Stat label={stat.label} value={stat.value} />}</For>
+          </div>
+          <Button
+            variant="secondary"
+            class="self-start"
+            onClick={() => {
+              dialog.show(() => <DialogContextEditor />)
+            }}
+          >
+            Edit Context
+          </Button>
         </div>
 
         <Show when={breakdown().length > 0}>

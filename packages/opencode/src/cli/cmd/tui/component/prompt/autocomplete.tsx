@@ -350,6 +350,11 @@ export function Autocomplete(props: {
           onSelect: () => command.trigger("session.compact"),
         },
         {
+          display: "/context",
+          description: "explore and edit session context",
+          onSelect: () => command.trigger("session.context"),
+        },
+        {
           display: "/unshare",
           disabled: !s.share,
           description: "unshare a session",

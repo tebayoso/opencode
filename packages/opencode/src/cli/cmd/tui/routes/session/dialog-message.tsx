@@ -5,6 +5,7 @@ import { useSDK } from "@tui/context/sdk"
 import { useRoute } from "@tui/context/route"
 import { Clipboard } from "@tui/util/clipboard"
 import type { PromptInfo } from "@tui/component/prompt/history"
+import { DialogContextEditor } from "@tui/component/dialog-context-editor"
 
 export function DialogMessage(props: {
   messageID: string
@@ -49,6 +50,14 @@ export function DialogMessage(props: {
             }
 
             dialog.clear()
+          },
+        },
+        {
+          title: "Edit Context",
+          value: "context.edit",
+          description: "remove specific context items",
+          onSelect: (dialog) => {
+            dialog.replace(() => <DialogContextEditor sessionID={props.sessionID} />)
           },
         },
         {
